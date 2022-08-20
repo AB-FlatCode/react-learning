@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import sublinks from './data';
 
 const AppContext = React.createContext();
 
@@ -6,6 +7,7 @@ const AppProvider = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSubmenuOpen, setIsSubmenuOpen] = useState(false);
   const [location, setLocation] = useState({});
+  const [page, setPage] = useState({ page: '', links: [] });
 
   const openSidebar = () => {
     setIsSidebarOpen(true);
@@ -15,6 +17,10 @@ const AppProvider = ({ children }) => {
   };
 
   const openSubmenu = (text, coords) => {
+    const page = sublinks.find((link) => {
+      return link.page === text;
+    });
+    setPage(page);
     setLocation(coords);
     setIsSubmenuOpen(true);
   };
@@ -32,6 +38,7 @@ const AppProvider = ({ children }) => {
         openSidebar,
         closeSidebar,
         location,
+        page,
       }}
     >
       {children}
