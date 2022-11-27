@@ -11,12 +11,53 @@ function App() {
   const handleValue = (e) => {
     console.log(e.target);
   };
+  const getPerson = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      const person = data.results[0];
+      const { phone, email } = person;
+      const { large: image } = person.picture;
+      const {
+        login: { password },
+      } = person;
+      const { first, last } = person.name;
+      const {
+        dob: { age },
+      } = person;
+      const {
+        street: { number, name },
+      } = person.location;
+      const newPerson = {
+        image,
+        phone,
+        email,
+        password,
+        age,
+        street: `${number} ${name}`,
+        name: `${first} ${last}`,
+      };
+      setPerson(newPerson);
+      setLoading(false);
+      setTitle('name');
+      setValue(newPerson.name);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getPerson();
+  }, []);
+
   return (
     <main>
       <div className="block bcg-black"></div>
       <div className="block">
         <div className="container">
-          <img src={(person && person.img) || defaultImage} alt="random user" className="user-img" />
+          <img src={(person && person.image) || defaultImage} alt="random user" className="user-img" />
           <p className="user-title">my {title} is </p>
           <p className="user-value">{value}</p>
           <div className="values-list">
@@ -44,7 +85,7 @@ function App() {
               <FaLock />
             </button>
           </div>
-          <button className="btn" type="button">
+          <button className="btn" type="button" onClick={getPerson}>
             {loading ? 'loading ...' : 'random user'}
           </button>
         </div>
