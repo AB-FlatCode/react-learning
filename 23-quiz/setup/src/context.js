@@ -19,7 +19,7 @@ const AppProvider = ({ children }) => {
   const [loading, setLoading] = useState(false)
   const [questions, setQuestions] = useState([])
   const [index, setIndex] = useState(0)
-  const [correctAnswer, setCorrectAnswer] = useState(0)
+  const [correct, setCorrect] = useState(0)
   const [error, setError] = useState(false)
 
   const [modalIsOpen, setModalIsOpen] = useState(false)
@@ -28,7 +28,7 @@ const AppProvider = ({ children }) => {
     setLoading(true)
     setWaiting(false)
     const response = await axios(url).catch((err) => console.log(err))
-    console.log(response.data.results)
+
     if (response) {
       const data = response.data.results
       if (data.length > 0) {
@@ -47,7 +47,6 @@ const AppProvider = ({ children }) => {
 
   useEffect(() => {
     fetchQuestions(tempUrl)
-    setLoading(false)
   }, [])
 
   return (
@@ -57,7 +56,7 @@ const AppProvider = ({ children }) => {
         loading,
         questions,
         index,
-        correctAnswer,
+        correct,
         error,
         modalIsOpen,
       }}
